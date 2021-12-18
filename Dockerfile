@@ -1,11 +1,10 @@
-FROM ubuntu:20.04
+ARG VERSION
+FROM sefose/code-server:$VERSION
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get -y upgrade && apt-get install --no-install-recommends -y \
     apt-transport-https \
-    ca-certificates \
-    curl \
     gnupg-agent \
     software-properties-common \
     openjdk-17-jdk \
@@ -46,12 +45,6 @@ RUN useradd \
     --uid 1000 \
     --gid 1000 \
     coder
-
-# install code-server
-# RUN curl -fsSL https://code-server.dev/install.sh | sh
-RUN VSC_VERSION=3.12.0 && curl -fOL https://github.com/cdr/code-server/releases/download/v${VSC_VERSION}/code-server_${VSC_VERSION}_amd64.deb && \
-    dpkg -i code-server_${VSC_VERSION}_amd64.deb && \
-    rm code-server_${VSC_VERSION}_amd64.deb
 
 RUN ln -s /lib/systemd/system/code-server@.service. /etc/systemd/system/default.target.wants/code-server@coder.service
 
