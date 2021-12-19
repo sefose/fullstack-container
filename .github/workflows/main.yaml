@@ -56,7 +56,7 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          tags: sefose/code-server:${{ steps.base_version.outputs.content }}_${{ steps.version.outputs.content }}
+          tags: sefose/fullstack-container:${{ steps.base_version.outputs.content }}_${{ steps.version.outputs.content }}
           build-args: |
             VERSION=${{ steps.base_version.outputs.content }}
       -
