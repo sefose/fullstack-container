@@ -65,7 +65,8 @@ jobs:
           push: true
           tags: sefose/fullstack-container:${{ steps.base_version.outputs.content }}_${{ steps.version.outputs.content }}
           build-args: |
-            VERSION=${{ steps.base_version.outputs.content }}
+            BASE_VERSION=${{ steps.base_version.outputs.content }}
+            DOCKER_VERSION=${{ steps.docker_version.outputs.content }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build_version.outputs.digest }}
