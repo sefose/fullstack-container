@@ -1,5 +1,5 @@
-ARG VERSION
-FROM sefose/code-server:$VERSION
+ARG BASE_VERSION
+FROM sefose/code-server:$BASE_VERSION
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -13,6 +13,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install --no-install-recomme
     vim \
     git \
     sudo \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # install kubectl and helm
@@ -24,15 +25,14 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
     apt-get update && apt-get install -y \
     helm \
     kubectl
-
-RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
-RUN apt-key fingerprint 0EBFCD88
-
-RUN add-apt-repository \
-       "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-       $(lsb_release -cs) \
-       stable"
-RUN apt-get update && apt-get install --no-install-recommends -y docker-ce docker-ce-cli containerd.io
+# install docker
+ARG DOCKER_VERSION
+RUN wget -O docker.tgz "https://download.docker.com/linux/static/stable/x86_64/docker-${DOCKER_VERSION}.tgz" && \
+    tar --extract \
+        --file docker.tgz \
+        --strip-components 1 \
+        --directory /usr/local/bin/  &&\
+        rm docker.tgz
 
 # add user for coding
 ## create group for user
@@ -44,8 +44,8 @@ RUN useradd \
     --groups sudo \
     --uid 1000 \
     --gid 1000 \
-    coder
+    coder && \
+    coder:changeme | chpasswd 
+
 
 RUN ln -s /lib/systemd/system/code-server@.service. /etc/systemd/system/default.target.wants/code-server@coder.service
-
-ENTRYPOINT ["/sbin/init"]
