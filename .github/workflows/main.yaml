@@ -36,6 +36,12 @@ jobs:
         uses: juliangruber/read-file-action@v1
         with:
           path: ./base_image_version
+      - 
+        name: read docker version
+        id: docker_version
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./docker_version
       -
         name: Build and push latest
         id: docker_build_latest
@@ -45,7 +51,8 @@ jobs:
           push: true
           tags: sefose/fullstack-container:latest
           build-args: |
-            VERSION=${{ steps.base_version.outputs.content }}
+            BASE_VERSION=${{ steps.base_version.outputs.content }}
+            DOCKER_VERSION=${{ steps.docker_version.outputs.content }}
       -
         name: Image digest
         run: echo ${{ steps.docker_build_latest.outputs.digest }}
