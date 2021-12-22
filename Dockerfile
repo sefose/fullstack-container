@@ -45,7 +45,7 @@ RUN useradd \
     --uid 1000 \
     --gid 1000 \
     coder && \
-    coder:changeme | chpasswd 
+    echo "coder:changeme" | chpasswd 
 
 
 RUN ln -s /lib/systemd/system/code-server@.service. /etc/systemd/system/default.target.wants/code-server@coder.service
