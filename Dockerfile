@@ -14,6 +14,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get install --no-install-recomme
     git \
     sudo \
     wget \
+    openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
 # install kubectl and helm
